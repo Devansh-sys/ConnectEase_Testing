@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="ConnectEase Frontend Test Suite" verbose="1">
+
+    <test name="Login Page Tests — CE_FE_TS_04 to CE_FE_TS_10">
+        <classes>
+            <class name="com.cts.connectease.tests.LoginPageTest"/>
+        </classes>
+    </test>
+
+    <test name="Home Page Tests — CE_FE_TS_11 to CE_FE_TS_15">
+        <classes>
+            <class name="com.cts.connectease.tests.HomePageTest"/>
+        </classes>
+    </test>
+
+</suite>
