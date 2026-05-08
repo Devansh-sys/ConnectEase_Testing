@@ -1,17 +1,172 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!--
+  ConnectEase Frontend UI Test Suite (Selenium + ChromeDriver)
+  ─────────────────────────────────────────────────────────────
+  Run order:
+    1.  Signup             — TC_SIGNUP_00 to TC_SIGNUP_09
+    2.  Login / Auth       — CE-FE-AUTH-TC004 to TC010
+    3.  Home               — CE-FE-HOME-TC001 to TC005
+    4.  Profile            — CE-FE-PROF-TC001 to TC007
+    5.  Service Listings   — CE-FE-LIST-TC001 to TC011
+    6.  Service Detail     — CE-FE-SERV-TC001 to TC008
+    7.  Reviews & Ratings  — CE-FE-REV-TC001  to TC008
+    8.  Vendor Dashboard   — CE-FE-VEND-TC001 to TC009
+    9.  Community Forum    — CE-FE-COM-TC001  to TC009
+   10.  Chat               — CE-FE-CHAT-TC001 to TC006
+   11.  AI Chat            — CE-FE-AI-TC001   to TC004
 
-<suite name="ConnectEase Frontend Test Suite" verbose="1">
+  Visual observation features:
+    • Every field/button flashes yellow/orange before interaction
+    • Browser stays open 2 s after each test so you can read the result
+    • @BeforeClass opens ONE browser per test class (no repeated logins)
+-->
+<suite name="ConnectEase Frontend Test Suite" verbose="1" thread-count="1">
 
-    <test name="Login Page Tests — CE_FE_TS_04 to CE_FE_TS_10">
+    <!--
+      ─────────────────────────────────────────────────────────────────────────
+      1. Signup Page Tests  (TC_SIGNUP_00 to TC_SIGNUP_09)
+         URL: /signup  — Full Name | Email | Password | Phone | Role radio
+         Creates the customer + vendor test accounts used by all later tests.
+      ─────────────────────────────────────────────────────────────────────────
+    -->
+    <test name="Signup Page Tests — TC_SIGNUP_00 to TC_SIGNUP_09" preserve-order="true">
+        <classes>
+            <class name="com.cts.connectease.tests.SignupPageTest"/>
+        </classes>
+    </test>
+
+    <!--
+      ─────────────────────────────────────────────────────────────────────────
+      2. Login / Auth Page Tests  (CE-FE-AUTH-TC004 to TC010)
+         URL: /login — Customer login, vendor login, logout, auth-guard,
+         vendor-guard (customer blocked from /vendor/dashboard)
+      ─────────────────────────────────────────────────────────────────────────
+    -->
+    <test name="Login Page Tests — CE-FE-AUTH-TC004 to TC010" preserve-order="true">
         <classes>
             <class name="com.cts.connectease.tests.LoginPageTest"/>
         </classes>
     </test>
 
-    <test name="Home Page Tests — CE_FE_TS_11 to CE_FE_TS_15">
+    <!--
+      ─────────────────────────────────────────────────────────────────────────
+      3. Home Page Tests  (CE-FE-HOME-TC001 to TC005)
+         URL: /  — Hero title, AI badge, search bar, category grid,
+         Chats nav link hidden for guest / visible when logged in
+      ─────────────────────────────────────────────────────────────────────────
+    -->
+    <test name="Home Page Tests — CE-FE-HOME-TC001 to TC005" preserve-order="true">
         <classes>
             <class name="com.cts.connectease.tests.HomePageTest"/>
+        </classes>
+    </test>
+
+    <!--
+      ─────────────────────────────────────────────────────────────────────────
+      4. Profile Page Tests  (CE-FE-PROF-TC001 to TC007)
+         URL: /profile — Auth-guarded; three-tab layout, read-only email,
+         profile update toast, password change validation, danger zone
+      ─────────────────────────────────────────────────────────────────────────
+    -->
+    <test name="Profile Page Tests — CE-FE-PROF-TC001 to TC007" preserve-order="true">
+        <classes>
+            <class name="com.cts.connectease.tests.ProfilePageTest"/>
+        </classes>
+    </test>
+
+    <!--
+      ─────────────────────────────────────────────────────────────────────────
+      5. Service Listings Page Tests  (CE-FE-LIST-TC001 to TC011)
+         URL: /services — Public; cards show required fields, category nav bar,
+         sort/filter, city+area cascade, reset, count badge, PG price label,
+         click-to-detail, vendor mode banner, empty-state
+      ─────────────────────────────────────────────────────────────────────────
+    -->
+    <test name="Service Listings Page Tests — CE-FE-LIST-TC001 to TC011" preserve-order="true">
+        <classes>
+            <class name="com.cts.connectease.tests.ServiceListingsPageTest"/>
+        </classes>
+    </test>
+
+    <!--
+      ─────────────────────────────────────────────────────────────────────────
+      6. Service Detail Page Tests  (CE-FE-SERV-TC001 to TC008)
+         URL: /services/{sid} — Shows service name, price, image gallery,
+         price label, chat-with-vendor (guest redirect + auth navigate),
+         view count, vendor card and "See all their services" link
+      ─────────────────────────────────────────────────────────────────────────
+    -->
+    <test name="Service Detail Page Tests — CE-FE-SERV-TC001 to TC008" preserve-order="true">
+        <classes>
+            <class name="com.cts.connectease.tests.ServiceDetailPageTest"/>
+        </classes>
+    </test>
+
+    <!--
+      ─────────────────────────────────────────────────────────────────────────
+      7. Reviews &amp; Ratings Page Tests  (CE-FE-REV-TC001 to TC008)
+         URL: /services/{sid}  — Reviews section within the service detail page;
+         star-picker interaction, submit review, average rating display,
+         auth-guard for form, edit/delete own review
+      ─────────────────────────────────────────────────────────────────────────
+    -->
+    <test name="Reviews and Ratings Tests — CE-FE-REV-TC001 to TC008" preserve-order="true">
+        <classes>
+            <class name="com.cts.connectease.tests.ReviewsRatingsPageTest"/>
+        </classes>
+    </test>
+
+    <!--
+      ─────────────────────────────────────────────────────────────────────────
+      8. Vendor Dashboard Page Tests  (CE-FE-VEND-TC001 to TC009)
+         URL: /vendor/dashboard — Vendor-only; stats cards, My Listings tab,
+         add/edit/delete service, toggle active/inactive, validation errors,
+         customer redirect, unauthenticated redirect
+      ─────────────────────────────────────────────────────────────────────────
+    -->
+    <test name="Vendor Dashboard Page Tests — CE-FE-VEND-TC001 to TC009" preserve-order="true">
+        <classes>
+            <class name="com.cts.connectease.tests.VendorDashboardPageTest"/>
+        </classes>
+    </test>
+
+    <!--
+      ─────────────────────────────────────────────────────────────────────────
+      9. Community Forum Page Tests  (CE-FE-COM-TC001 to TC009)
+         URL: /community — Guest can view; logged-in can create/edit/delete;
+         category filters, post card fields, own-post controls, confirmation
+      ─────────────────────────────────────────────────────────────────────────
+    -->
+    <test name="Community Forum Page Tests — CE-FE-COM-TC001 to TC009" preserve-order="true">
+        <classes>
+            <class name="com.cts.connectease.tests.CommunityForumPageTest"/>
+        </classes>
+    </test>
+
+    <!--
+      ─────────────────────────────────────────────────────────────────────────
+      10. Chat Page Tests  (CE-FE-CHAT-TC001 to TC006)
+          URL: /chats — Auth-guarded; session list, right-panel open, auto-scroll,
+          bubble styling, real-time send, unread badge
+      ─────────────────────────────────────────────────────────────────────────
+    -->
+    <test name="Chat Page Tests — CE-FE-CHAT-TC001 to TC006" preserve-order="true">
+        <classes>
+            <class name="com.cts.connectease.tests.ChatPageTest"/>
+        </classes>
+    </test>
+
+    <!--
+      ─────────────────────────────────────────────────────────────────────────
+      11. AI Chat Page Tests  (CE-FE-AI-TC001 to TC004)
+          URL: /ai-chat — Guest-accessible; natural language query returns
+          AI response, loading indicator, follow-up context awareness
+      ─────────────────────────────────────────────────────────────────────────
+    -->
+    <test name="AI Chat Page Tests — CE-FE-AI-TC001 to TC004" preserve-order="true">
+        <classes>
+            <class name="com.cts.connectease.tests.AIChatPageTest"/>
         </classes>
     </test>
 

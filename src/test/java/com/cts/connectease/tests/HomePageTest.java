@@ -11,7 +11,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
- * Home Page Test Cases — Gobika
  * Covers: CE_FE_TS_11 to CE_FE_TS_15
  */
 public class HomePageTest extends BaseTest {
@@ -125,6 +124,7 @@ public class HomePageTest extends BaseTest {
     // CE_FE_TS_15 — My Chats link visible only when authenticated
     @Test(description = "CE_FE_TS_15 - My Chats link should NOT be visible for guest users")
     public void testChatsLinkHiddenForGuest() {
+        clearSession(); // ensure no previous test left the browser logged in
         homePage.navigateTo(BASE_URL);
 
         Assert.assertFalse(
@@ -135,13 +135,18 @@ public class HomePageTest extends BaseTest {
 
     @Test(description = "CE_FE_TS_15 - My Chats link SHOULD be visible when logged in as Customer")
     public void testChatsLinkVisibleWhenLoggedIn() {
+        clearSession(); // start clean before logging in
         loginPage.navigateTo(BASE_URL);
         loginPage.login(CUSTOMER_EMAIL, CUSTOMER_PASSWORD);
-        wait.until(ExpectedConditions.urlToBe(BASE_URL + "/"));
+
+        // Use a 20 s wait — Vercel + cloud backend can be slow on cold start
+        new org.openqa.selenium.support.ui.WebDriverWait(driver, java.time.Duration.ofSeconds(20))
+                .until(ExpectedConditions.not(ExpectedConditions.urlContains("/login")));
 
         Assert.assertTrue(
             navbarPage.isChatsLinkVisible(),
             "'Chats' link should be visible in navbar for authenticated users"
         );
+        System.out.println("✔ CE_FE_TS_15 PASSED: Chats link visible after customer login");
     }
 }

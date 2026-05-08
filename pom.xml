@@ -16,6 +16,8 @@
         <selenium.version>4.18.1</selenium.version>
         <testng.version>7.9.0</testng.version>
         <webdrivermanager.version>5.7.0</webdrivermanager.version>
+        <restassured.version>5.4.0</restassured.version>
+        <jackson.version>2.17.0</jackson.version>
     </properties>
 
     <dependencies>
@@ -33,11 +35,32 @@
             <version>${webdrivermanager.version}</version>
         </dependency>
 
-        <!-- TestNG — compile scope so BaseTest in main/java can use annotations -->
+        <!-- TestNG -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>${testng.version}</version>
+        </dependency>
+
+        <!-- REST Assured — API testing -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${restassured.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>json-path</artifactId>
+            <version>${restassured.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Jackson — JSON serialization for REST Assured -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
     </dependencies>
 

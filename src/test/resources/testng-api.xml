@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<!--
+  ConnectEase Backend API Test Suite
+  Source: ConnectEase_Backend_Testing_UPDATED.xlsx
+  Total: 42 test cases across 10 modules
+  Run order is critical — Auth must run first to populate shared cookies/UIDs.
+-->
+<suite name="ConnectEase Backend API Test Suite" verbose="1" thread-count="1">
+
+    <!--
+      ─────────────────────────────────────────────────────────────────────
+      Module 3.1 — Authentication (CE-AUTH-TC001 to TC008)
+      MUST run first — populates customerCookie, vendorCookie, customerUid, vendorUid
+      ─────────────────────────────────────────────────────────────────────
+    -->
+    <test name="Authentication API Tests — CE-AUTH-TC001 to TC008" preserve-order="true">
+        <classes>
+            <class name="com.cts.connectease.api.tests.AuthApiTest"/>
+        </classes>
+    </test>
+
+    <!--
+      ─────────────────────────────────────────────────────────────────────
+      Module 3.2 — User Profile (CE-PROF-TC001 to TC007)
+      Depends on: customerUid, vendorUid, customerCookie
+      ─────────────────────────────────────────────────────────────────────
+    -->
+    <test name="User Profile API Tests — CE-PROF-TC001 to TC007" preserve-order="true">
+        <classes>
+            <class name="com.cts.connectease.api.tests.UserProfileApiTest"/>
+        </classes>
+    </test>
+
+    <!--
+      ─────────────────────────────────────────────────────────────────────
+      Module 3.9 — Categories & Locations (CE-CAT-TC001 to TC003)
+      Run before VendorDashboard to populate testCategoryId for service creation
+      ─────────────────────────────────────────────────────────────────────
+    -->
+    <test name="Categories and Locations API Tests — CE-CAT-TC001 to TC003" preserve-order="true">
+        <classes>
+            <class name="com.cts.connectease.api.tests.CategoriesLocationsApiTest"/>
+        </classes>
+    </test>
+
+    <!--
+      ─────────────────────────────────────────────────────────────────────
+      Module 3.3 — Service Listings (CE-LIST-TC001 to TC006)
+      ─────────────────────────────────────────────────────────────────────
+    -->
+    <test name="Service Listings API Tests — CE-LIST-TC001 to TC006" preserve-order="true">
+        <classes>
+            <class name="com.cts.connectease.api.tests.ServiceListingsApiTest"/>
+        </classes>
+    </test>
+
+    <!--
+      ─────────────────────────────────────────────────────────────────────
+      Module 3.6 — Vendor Dashboard (CE-VEND-TC001 to TC009)
+      Creates testSid used by ServiceDetail and Ratings tests
+      ─────────────────────────────────────────────────────────────────────
+    -->
+    <test name="Vendor Dashboard API Tests — CE-VEND-TC001 to TC009" preserve-order="true">
+        <classes>
+            <class name="com.cts.connectease.api.tests.VendorDashboardApiTest"/>
+        </classes>
+    </test>
+
+    <!--
+      ─────────────────────────────────────────────────────────────────────
+      Module 3.4 — Service Detail & Reviews (CE-SERV-TC001 to TC005)
+      Depends on: testSid (from VendorDashboard); populates testRid
+      ─────────────────────────────────────────────────────────────────────
+    -->
+    <test name="Service Detail and Reviews API Tests — CE-SERV-TC001 to TC005" preserve-order="true">
+        <classes>
+            <class name="com.cts.connectease.api.tests.ServiceDetailApiTest"/>
+        </classes>
+    </test>
+
+    <!--
+      ─────────────────────────────────────────────────────────────────────
+      Module 3.5 — Ratings (CE-RATE-TC001 to TC003)
+      Depends on: testSid, testRid (note: TC002/TC003 disabled — rid is null due to known bug)
+      ─────────────────────────────────────────────────────────────────────
+    -->
+    <test name="Ratings API Tests — CE-RATE-TC001 to TC003" preserve-order="true">
+        <classes>
+            <class name="com.cts.connectease.api.tests.RatingsApiTest"/>
+        </classes>
+    </test>
+
+    <!--
+      ─────────────────────────────────────────────────────────────────────
+      Module 3.7 — Community Forum (CE-COM-TC001 to TC008)
+      Depends on: customerUid, customerCookie, vendorCookie
+      ─────────────────────────────────────────────────────────────────────
+    -->
+    <test name="Community Forum API Tests — CE-COM-TC001 to TC008" preserve-order="true">
+        <classes>
+            <class name="com.cts.connectease.api.tests.CommunityForumApiTest"/>
+        </classes>
+    </test>
+
+    <!--
+      ─────────────────────────────────────────────────────────────────────
+      Module 3.8 — Real-Time Chat (CE-CHAT-TC001 to TC004)
+      Depends on: vendorUid, customerCookie
+      ─────────────────────────────────────────────────────────────────────
+    -->
+    <test name="Real-Time Chat API Tests — CE-CHAT-TC001 to TC004" preserve-order="true">
+        <classes>
+            <class name="com.cts.connectease.api.tests.ChatApiTest"/>
+        </classes>
+    </test>
+
+    <!--
+      ─────────────────────────────────────────────────────────────────────
+      Module 3.10 — AI Chat (CE-AI-TC001 to TC003)
+      No auth required; CE-AI-TC003 is disabled (cannot simulate Gemini outage)
+      ─────────────────────────────────────────────────────────────────────
+    -->
+    <test name="AI Chat API Tests — CE-AI-TC001 to TC003" preserve-order="true">
+        <classes>
+            <class name="com.cts.connectease.api.tests.AIChatApiTest"/>
+        </classes>
+    </test>
+
+</suite>

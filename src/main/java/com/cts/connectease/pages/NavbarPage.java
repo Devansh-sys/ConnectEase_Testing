@@ -1,7 +1,9 @@
 package com.cts.connectease.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -24,6 +26,23 @@ public class NavbarPage {
         this.wait   = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
+    // ── Visual helper ─────────────────────────────────────────────────────────
+
+    private void highlight(WebElement el) {
+        try {
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript(
+                "arguments[0].style.outline='3px solid #f59e0b';" +
+                "arguments[0].style.backgroundColor='#fef9c3';", el);
+            Thread.sleep(400);
+            js.executeScript(
+                "arguments[0].style.outline='';" +
+                "arguments[0].style.backgroundColor='';", el);
+        } catch (Exception ignored) {}
+    }
+
+    // ── Visibility checks ─────────────────────────────────────────────────────
+
     public boolean isSignInVisible() {
         return !driver.findElements(signInBtn).isEmpty();
     }
@@ -40,20 +59,30 @@ public class NavbarPage {
         return !driver.findElements(avatarBtn).isEmpty();
     }
 
+    // ── Actions ───────────────────────────────────────────────────────────────
+
     public void clickAvatar() {
-        wait.until(ExpectedConditions.elementToBeClickable(avatarBtn)).click();
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(avatarBtn));
+        highlight(el);
+        el.click();
     }
 
     public void clickSignOut() {
         clickAvatar();
-        wait.until(ExpectedConditions.elementToBeClickable(signOutBtn)).click();
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(signOutBtn));
+        highlight(el);
+        el.click();
     }
 
     public void clickSignIn() {
-        wait.until(ExpectedConditions.elementToBeClickable(signInBtn)).click();
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(signInBtn));
+        highlight(el);
+        el.click();
     }
 
     public void clickLogo() {
-        wait.until(ExpectedConditions.elementToBeClickable(logoContainer)).click();
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(logoContainer));
+        highlight(el);
+        el.click();
     }
 }

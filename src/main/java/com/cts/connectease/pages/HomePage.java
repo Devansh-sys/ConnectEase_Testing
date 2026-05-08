@@ -1,6 +1,7 @@
 package com.cts.connectease.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -27,10 +28,29 @@ public class HomePage {
         this.wait   = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
+    // ── Visual helper ─────────────────────────────────────────────────────────
+
+    private void highlight(WebElement el) {
+        try {
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript(
+                "arguments[0].style.outline='3px solid #f59e0b';" +
+                "arguments[0].style.backgroundColor='#fef9c3';", el);
+            Thread.sleep(400);
+            js.executeScript(
+                "arguments[0].style.outline='';" +
+                "arguments[0].style.backgroundColor='';", el);
+        } catch (Exception ignored) {}
+    }
+
+    // ── Navigation ────────────────────────────────────────────────────────────
+
     public void navigateTo(String baseUrl) {
         driver.get(baseUrl + "/");
         wait.until(ExpectedConditions.visibilityOfElementLocated(heroTitle));
     }
+
+    // ── Verifications ─────────────────────────────────────────────────────────
 
     public boolean isHeroTitleVisible() {
         try {
@@ -52,13 +72,6 @@ public class HomePage {
         return !driver.findElements(heroSearchBtn).isEmpty() && driver.findElement(heroSearchBtn).isDisplayed();
     }
 
-    public void clickSearchButton(String query) {
-        WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(heroSearchInput));
-        input.clear();
-        input.sendKeys(query);
-        driver.findElement(heroSearchBtn).click();
-    }
-
     public boolean isCategoryGridVisible() {
         try {
             return wait.until(ExpectedConditions.visibilityOfElementLocated(categoriesGrid)).isDisplayed();
@@ -73,11 +86,6 @@ public class HomePage {
         return cards.size();
     }
 
-    public void clickCategoryByIndex(int index) {
-        List<WebElement> cards = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(categoryCards));
-        cards.get(index).click();
-    }
-
     public boolean isConnectEaseBrandVisible() {
         try {
             WebElement brand = wait.until(ExpectedConditions.visibilityOfElementLocated(gradientText));
@@ -90,5 +98,26 @@ public class HomePage {
     public boolean isOnHomePage() {
         String url = driver.getCurrentUrl();
         return url.endsWith("/") || url.equals("http://localhost:4200");
+    }
+
+    // ── Actions ───────────────────────────────────────────────────────────────
+
+    public void clickSearchButton(String query) {
+        WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(heroSearchInput));
+        highlight(input);
+        input.clear();
+        input.sendKeys(query);
+
+        WebElement btn = driver.findElement(heroSearchBtn);
+        highlight(btn);
+        btn.click();
+    }
+
+    public void clickCategoryByIndex(int index) {
+        List<WebElement> cards = wait.until(
+                ExpectedConditions.visibilityOfAllElementsLocatedBy(categoryCards));
+        WebElement card = cards.get(index);
+        highlight(card);
+        card.click();
     }
 }
